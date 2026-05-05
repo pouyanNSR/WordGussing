@@ -7,14 +7,15 @@ import { letters } from "../data/letters";
 const AnswerBox = () => {
   const { divContents, handleDeleteLetter, validate, changeLetterBg } =
     useContext(GameContext);
-    console.log(changeLetterBg);
+    // console.log(changeLetterBg);
     
   // const answerLength = letters.length;
   const letterButtonStyle = (index, enable) => {
+    const isInclude = changeLetterBg.index.some(item => item === index)
     return {
       backgroundColor: validate
         ? "rgb(4, 156, 19)"
-        : enable && changeLetterBg.index.some(item => item === index)
+        : enable && isInclude
         ? "rgb(8, 91, 235)"
         : "primary.main",
       flex: "0 0 25%",

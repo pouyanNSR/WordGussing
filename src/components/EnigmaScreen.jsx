@@ -24,9 +24,14 @@ const EnigmaScreen = memo(({stage}) => {
           alignItems: "center",
           borderRadius: "4px",
           boxShadow: "0 0 12px inset rgba(37, 32, 31, 0.63)",
+          "&:hover":{
+            "& .stickers": {
+              scale:"1.4"
+            }
+          }
         }}
       >
-        <Typography sx={{ fontSize: "55px", direction: "rtl" }}>
+        <Typography className="stickers" sx={{ fontSize: "55px", direction: "rtl",transition:"0.3s ease" }}>
           {enigmas[stage].image}
         </Typography>
       </Box>

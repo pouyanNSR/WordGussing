@@ -62,9 +62,13 @@ const App = () => {
   });
   // console.log(endGame);
 
+  const letterButtonsQuantity = 25;
+
   // تابع تولید ۲۶ حرف نهایی (۲۰ رندوم + ۶ اضافه)
   const generateFinalLetters = useCallback(() => {
     // console.log("generateFinalLetters");
+    // ۶ حرف اضافه دلخواه (می‌توانید تغییر دهید)
+    const extraLetters = enigmas[stage].letters;
 
     // انتخاب ۲۰ حرف رندوم
     const shuffled = [...letters];
@@ -72,23 +76,23 @@ const App = () => {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
-    const random20 = shuffled.slice(0, 20);
-
-    // ۶ حرف اضافه دلخواه (می‌توانید تغییر دهید)
-    const extraLetters = enigmas[stage].letters;
+    const randomQuantity = shuffled.slice(
+      0,
+      letterButtonsQuantity - extraLetters.length
+    );
 
     // ترکیب و حذف تکراری‌ها
-    // let combined = [...new Set([...random20, ...extraLetters])];
+    // let combined = [...new Set([...randomQuantity, ...extraLetters])];
 
     //تکراری هم می توانیم داشته باشیم
-    let combined = [...random20, ...extraLetters];
+    let combined = [...randomQuantity, ...extraLetters];
 
     // در صورت کمبود تا ۲۶ حرف، از بقیه حروف پر کن
-    if (combined.length < 26) {
-      const remaining = letters.filter((l) => !combined.includes(l));
-      const needed = 26 - combined.length;
-      combined = [...combined, ...remaining.slice(0, needed)];
-    }
+    // if (combined.length < 26) {
+    //   const remaining = letters.filter((l) => !combined.includes(l));
+    //   const needed = 26 - combined.length;
+    //   combined = [...combined, ...remaining.slice(0, needed)];
+    // }
 
     return shuffledArray(combined);
   }, [stage]);
@@ -136,7 +140,7 @@ const App = () => {
     } else {
       setValidate(false);
     }
-  }, [areAllbuttonsField]);
+  }, [areAllbuttonsField, stage, divContents]);
 
   const showFirstLetter = () => {
     if (score >= 500) {
@@ -149,8 +153,7 @@ const App = () => {
         enable: true,
         index: [...prev.index, 0],
       }));
-
-      alert("حرف اول مشخص شد.");
+      setScore((e) => e - 500);
     } else {
       alert("پول کافی ندارید!");
     }
@@ -162,10 +165,10 @@ const App = () => {
         const randomNum = Math.floor(Math.random() * divContents.length);
 
         if (divContents[randomNum] === "") {
-          console.log("empty");
-          console.log(divContents[randomNum], "in divContents");
+          // console.log("empty");
+          // console.log(divContents[randomNum], "in divContents");
           const randomLetter = enigmas[stage].letters[randomNum];
-          console.log(randomLetter);
+          // console.log(randomLetter);
 
           const newDivContents = [...divContents];
           newDivContents[randomNum] = randomLetter;
@@ -175,12 +178,12 @@ const App = () => {
             enable: true,
             index: [...prev.index, randomNum],
           }));
+          setScore((e) => e - 500);
         } else {
           return randomLetterGenerator();
         }
       };
       randomLetterGenerator();
-      alert("حرف تصادفی مشخص شد.");
     } else {
       alert("پول کافی ندارید!");
     }
@@ -223,34 +226,34 @@ const App = () => {
             <Helmet>
               <title>Bazi</title>
             </Helmet>
-            <VictoryModal
-              isOpen={activeModal === "victory"}
-              onClose={() => {
-                setValidate(false);
-                setActiveModal("");
-                setStage((e) => e + 1);
-                setScore((e) => e + 1000);
-                setChangeLetterBg((prev) => ({
-                  ...prev,
-                  index: [],
-                  enable: false,
-                }));
-              }}
-              stage={stage}
-              soundEnabled={true}
-              endGame={endGame}
-            />
-            <HelpModal
-              isOpen={activeModal === "help"}
-              onClose={() => {
-                setActiveModal("");
-                // setScore((e) => e + 1000);
-              }}
-              stage={stage}
-              soundEnabled={true}
-              endGame={endGame}
-            />
             <MainLayout>
+              <VictoryModal
+                isOpen={activeModal === "victory"}
+                onClose={() => {
+                  setValidate(false);
+                  setActiveModal("");
+                  setStage((e) => e + 1);
+                  setScore((e) => e + 1000);
+                  setChangeLetterBg((prev) => ({
+                    ...prev,
+                    index: [],
+                    enable: false,
+                  }));
+                }}
+                stage={stage}
+                soundEnabled={true}
+                endGame={endGame}
+              />
+              <HelpModal
+                isOpen={activeModal === "help"}
+                onClose={() => {
+                  setActiveModal("");
+                  // setScore((e) => e + 1000);
+                }}
+                stage={stage}
+                soundEnabled={true}
+                endGame={endGame}
+              />
               <HelpItem />
               <ScoreBadge score={score} />
               <EnigmaScreen stage={stage} />

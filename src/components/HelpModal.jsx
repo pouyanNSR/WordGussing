@@ -5,18 +5,27 @@ import { keyframes } from "@emotion/react";
 import { MonetizationOnRounded } from "@mui/icons-material";
 import { GameContext } from "../context/index";
 
-// import victorySound from "../assets/audio/tada.mp3"
-
-// ─── انیمیشن چرخش برای حاشیه درخشان ───
-const spin = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-`;
-
 // ─── کامپوننت مودال ───
 const HelpModal = ({ isOpen, onClose, stage }) => {
+  const { showFirstLetter, showRandomLetter } = useContext(GameContext);
 
-  const {showFirstLetter,showRandomLetter} = useContext(GameContext)
+  const handleShowRandomLetter = async () => {
+    try {
+      await showRandomLetter();
+      onClose();
+    } catch (error) {
+      console.error(error,"error in handleShowRandomLetter()");
+    }
+  };
+
+  const handleShowFirstLetter = async () => {
+    try {
+      await showFirstLetter();
+      onClose();
+    } catch (error) {
+      console.error(error,"error in handleShowFirstLetter()");
+    }
+  };
 
   const helpItemsStyle = {
     width: "90%",
@@ -132,8 +141,17 @@ const HelpModal = ({ isOpen, onClose, stage }) => {
                     marginBottom: "30px",
                   }}
                 >
-                  <Box sx={{display:"flex",flexDirection:"column",gap:"20px"}}>
-                    <Button onClick={() => showFirstLetter()} sx={helpItemsStyle}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "20px",
+                    }}
+                  >
+                    <Button
+                      onClick={handleShowFirstLetter}
+                      sx={helpItemsStyle}
+                    >
                       <Typography
                         sx={{
                           color: "rgba(88, 3, 148, 0.96)",
@@ -173,7 +191,10 @@ const HelpModal = ({ isOpen, onClose, stage }) => {
                         />
                       </Box>
                     </Button>
-                    <Button onClick={() => showRandomLetter()} sx={helpItemsStyle}>
+                    <Button
+                      onClick={handleShowRandomLetter}
+                      sx={helpItemsStyle}
+                    >
                       <Typography
                         sx={{
                           color: "rgba(88, 3, 148, 0.96)",
