@@ -6,13 +6,13 @@ const ScoreBadge = ({ score = 0, icon: IconComponent = MonetizationOnIcon }) => 
   return (
     <Box
       sx={{
-        position: 'fixed',
+        position: 'absolute',
         top: 20,
-        left: 20,
+        left: "4%",
         display: 'flex',
         alignItems: 'center',
         gap: 1,
-        px: 2.5,
+        px: {xs:1.5,md:2.5},
         py: 1.2,
         borderRadius: '32px',
         // گرادینت طلایی سه‌بعدی
@@ -43,14 +43,14 @@ const ScoreBadge = ({ score = 0, icon: IconComponent = MonetizationOnIcon }) => 
       <IconComponent
         sx={{
           color: '#FFF',
-          fontSize: 34,
+          fontSize: {xs:22,md:34},
           filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.4))',
         }}
       />
       <Typography
-        variant="h5"
         fontWeight="800"
         sx={{
+          fontSize: {xs:14,md:24},
           color: '#FFF',
           textShadow: '0 2px 8px rgba(0,0,0,0.5)',
           lineHeight: 1,

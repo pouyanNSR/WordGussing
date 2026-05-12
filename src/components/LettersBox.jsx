@@ -3,7 +3,6 @@ import { useContext, useEffect, useState } from "react";
 import { GameContext } from "../context/index";
 import { enigmas } from "../data/answer";
 
-
 const LettersBox = () => {
   const {
     generateFinalLetters,
@@ -11,7 +10,7 @@ const LettersBox = () => {
     setDivContents,
     availableLetters,
     setAvailableLetters,
-    stage
+    stage,
   } = useContext(GameContext);
 
   const divCount = enigmas[stage].letters.length;
@@ -55,7 +54,7 @@ const LettersBox = () => {
   const letterButtonStyle = {
     background:
       "linear-gradient(165deg,rgba(252, 250, 250, 0.92) 0%,rgb(255, 217, 2) 50%)",
-    height: "40px",
+    height: { xs: "auto", md: "40px" },
     color: "secondary.main",
     boxShadow: "0 0 8px rgba(0, 0, 0, 0.66)",
     border: "3px solid rgba(0, 0, 0, 0.22)",
@@ -66,7 +65,7 @@ const LettersBox = () => {
   };
 
   const letterStyle = {
-    fontSize: 24,
+    fontSize: { xs: 18, md: 24 },
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -78,13 +77,12 @@ const LettersBox = () => {
     <>
       <Box
         sx={{
-          flex: "0 0 90%",
-          width: "60%",
+          width: "100%",
           display: "grid",
-          gridTemplateColumns: "repeat(7,1fr)",
+          gridTemplateColumns:{ xs:"repeat(5,1fr)", md:"repeat(7,1fr)"},
+          // gridTemplateColumns: "repeat(auto-fit,minmax(90px,1fr))",
           columnGap: 2,
-          rowGap: "-30px",
-          padding: "30px",
+          padding: { xs: "22px", md: "30px" },
           justifyContent: "center",
           alignItems: "center",
         }}
@@ -99,18 +97,6 @@ const LettersBox = () => {
           </Button>
         ))}
       </Box>
-      {availableLetters.length === 0 && (
-        <div
-          style={{
-            textAlign: "center",
-            marginTop: "20px",
-            fontSize: "18px",
-            color: "green",
-          }}
-        >
-          ✅ همه حروف با موفقیت در div ها قرار گرفتند!
-        </div>
-      )}
     </>
   );
 

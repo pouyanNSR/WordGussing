@@ -60,15 +60,21 @@ const App = () => {
     index: [],
     enable: false,
   });
-  // console.log(endGame);
 
-  const letterButtonsQuantity = 25;
+  console.log("divContents: ",divContents);
+  
+  // const letterButtonsQuantity = 25;
+  const letterButtonsQuantity = 20;
 
   // تابع تولید ۲۶ حرف نهایی (۲۰ رندوم + ۶ اضافه)
-  const generateFinalLetters = useCallback(() => {
+  const generateFinalLetters = () => {
+    console.log("generateFinalLetters() is started");
+    
     // console.log("generateFinalLetters");
     // ۶ حرف اضافه دلخواه (می‌توانید تغییر دهید)
     const extraLetters = enigmas[stage].letters;
+    console.log("stage in generateFinalLetters():",stage);
+    
 
     // انتخاب ۲۰ حرف رندوم
     const shuffled = [...letters];
@@ -94,8 +100,9 @@ const App = () => {
     //   combined = [...combined, ...remaining.slice(0, needed)];
     // }
 
+    // console.log("generateFinalLetters() is complited");
     return shuffledArray(combined);
-  }, [stage]);
+  };
 
   const handleDeleteLetter = useCallback(
     (letter, letterIndex) => {
@@ -132,6 +139,8 @@ const App = () => {
     if (areAllbuttonsField) {
       const wordFormDivContents = divContents.join("");
       const wordFormAnswer = enigmas[stage].letters.join("");
+      console.log("correct word:",wordFormAnswer);
+      console.log("stage in use Effect:",stage);           
       if (wordFormAnswer === wordFormDivContents) {
         setValidate(true);
       } else {
@@ -160,6 +169,7 @@ const App = () => {
   };
 
   const showRandomLetter = () => {
+    console.log("showRandomLetter()");
     if (score >= 500) {
       const randomLetterGenerator = () => {
         const randomNum = Math.floor(Math.random() * divContents.length);
@@ -189,17 +199,26 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
+  useEffect(() => {  
+    console.log("cheking if validate is true");  
     if (validate) {
+      console.log("setting activeModal state = victory ...");  
       setTimeout(() => setActiveModal("victory"), 700);
     }
+    console.log("end of setting activeModal");  
   }, [validate]);
 
+    useEffect(() => {
+      console.log("endGame is true. REALLY: ",endGame);
+  }, [endGame]);
+
   useEffect(() => {
+    console.log("check for last enima");   
     const lastEnigma = enigmas.length - 1;
     if (stage === lastEnigma) {
       setEndGame(true);
-    }
+      console.log("changing endGame value"); 
+    }  
   }, [stage]);
 
   return (
@@ -239,6 +258,7 @@ const App = () => {
                     index: [],
                     enable: false,
                   }));
+                  console.log("stage:",stage);                  
                 }}
                 stage={stage}
                 soundEnabled={true}

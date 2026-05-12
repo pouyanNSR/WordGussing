@@ -1,0 +1,46 @@
+      <Grid
+        container
+        sx={buttonContainerStyle}
+        // spacing={{ xs: 0.5, sm: 1 }}
+        // justifyContent="center"
+        // sx={{
+        //   maxWidth: { xs: "300px", sm: "400px", md: "500px" },
+        //   backgroundColor: "rgb(241, 11, 199)",
+        //   p: 1,
+        //   borderRadius: 1,
+        // }}
+      >
+        {divContents.map((content, index) => (
+          <Grid item xs key={index} className="inner-button-container">
+            <Button
+              onClick={() => handleDeleteLetter(content, index)}
+              sx={letterButtonStyle(index, changeLetterBg.enable)}
+            >
+              {content}
+            </Button>
+          </Grid>
+        ))}
+      </Grid>
+
+
+
+          <Box
+      sx={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgb(23, 102, 43)",
+      }}
+      className="buttons-container"
+    >
+      <Box sx={buttonContainerStyle} className="button-container">
+        {divContents.map((content, index) => (
+          <Button
+            key={index}
+            onClick={() => handleDeleteLetter(content, index)}
+            sx={letterButtonStyle(index, changeLetterBg.enable)}
+          >
+            {content}
+          </Button>
+        ))}
+      </Box>
+    </Box>

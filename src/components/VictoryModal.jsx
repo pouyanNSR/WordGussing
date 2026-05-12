@@ -22,6 +22,8 @@ const GlowingBorder = styled(Box)(({ theme }) => ({
 
 // ─── کامپوننت مودال ───
 const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => {
+  // console.log("endGame: ",endGame);
+  
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e) => {
@@ -56,12 +58,12 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
       audioRef.current.currentTime = 0;
 
       audioRef.current.play()
-        .then(() => {
-          // console.log("🔊 صدای پیروزی پخش شد!");
-        })
-        .catch((error) => {
-          // console.warn("⚠️ خطا در پخش صدا:", error);
-        });
+        // .then(() => {
+        //   console.log("🔊 صدای پیروزی پخش شد!");
+        // })
+        // .catch((error) => {
+        //   console.warn("⚠️ خطا در پخش صدا:", error);
+        // });
     }
   }, [isOpen, soundEnabled]);
 
@@ -118,11 +120,11 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
               onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
               sx={{
-                transform: `rotateY(${mousePosition.x * 10}deg) rotateX(${
-                  -mousePosition.y * 10
-                }deg)`,
-                transition: "transform 0.1s ease-out",
-                transformStyle: "preserve-3d",
+                // transform: `rotateY(${mousePosition.x * 10}deg) rotateX(${
+                //   -mousePosition.y * 10
+                // }deg)`,
+                // transition: "transform 0.1s ease-out",
+                // transformStyle: "preserve-3d",
                 borderRadius: "16px",
                 position: "relative",
               }}
@@ -154,7 +156,7 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
                       style={{
                         position: "absolute",
                         fontSize: "2rem",
-                        top: `${10 + Math.random() * 70}%`,
+                        top: `${10 + Math.random() * 50}%`,
                         left: `${10 + Math.random() * 90}%`,
                       }}
                       animate={{
@@ -204,7 +206,7 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
                       mb: 1,
                     }}
                   >
-                    { endGame ? "تموم شد" : "آفرین" } زَزَزَنیکه!!
+                    { endGame ? "تموم شد" : "آفرین" }!
                   </Typography>
                 </motion.div>
 
@@ -249,9 +251,13 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
                   style={{ display: "inline-block" }}
                 >
                   <Button
-                    onClick={endGame ? null : onClose}
                     variant="contained"
                     disabled={endGame}
+                    // onClick={endGame ? null : onClose}
+                    onClick={() => {
+                      console.log("Button Clicked✅");
+                      if(!endGame) onClose()
+                    }}
                     sx={{
                       px: 5,
                       py: 1.5,

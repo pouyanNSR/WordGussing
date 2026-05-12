@@ -4,11 +4,11 @@ export const enigmas = [
         image:"👨‍🦰 💩",
         letters:["ا","ن","آ","ق","ا"]
     },
-    {
-        name:"دماغدراز",
-        image:"📏 👃",
-        letters:["د","م","ا","غ","د","ر","ا","ز"]
-    },
+    // {
+    //     name:"دماغدراز",
+    //     image:"📏 👃",
+    //     letters:["د","م","ا","غ","د","ر","ا","ز"]
+    // },
     {
         name:"سوستوله",
         image:"👶 🪳",
@@ -23,5 +23,15 @@ export const enigmas = [
         name:"زنیکه",
         image:"1️⃣ 👩‍🦰",
         letters:["ز","ن","ی","ک","ه"]
+    },
+    {
+        name:"سر",
+        image:"👩‍🦰",
+        letters:["س","ر"]
+    },
+    {
+        name:"در",
+        image:"🚪",
+        letters:["د","ر"]
     },
 ]

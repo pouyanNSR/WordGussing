@@ -4,8 +4,9 @@ const MainLayout = ({ children }) => {
     return (
         <Box sx={{
             position:"relative",
-            width:"100%",
-            height:"100vh",
+            width:"100dvw",
+            // height:"100vh",
+            height:"100dvh",
             background:"aqua",
             display:"flex",
             flexDirection:"column",
