@@ -1,9 +1,8 @@
 import { Box, Grid } from "@mui/material";
 import AnswerBox from "./AnswerBox";
 import LettersBox from "./LettersBox";
-import { column } from "stylis";
 
-const LowerPart = () => {
+const LowerPart = ({stage}) => {
   return (
     <Grid
       container

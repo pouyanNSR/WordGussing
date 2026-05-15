@@ -1,8 +1,6 @@
-import { Box, Button, Grid, Input, TextField } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import { useContext } from "react";
 import { GameContext } from "../context/index";
-import { enigmas } from "../data/answer";
-import { letters } from "../data/letters";
 
 const AnswerBox = () => {
   const { divContents, handleDeleteLetter, validate, changeLetterBg } =

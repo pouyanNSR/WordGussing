@@ -56,25 +56,23 @@ const App = () => {
   const [endGame, setEndGame] = useState(false);
   const [score, setScore] = useState(0);
   const [activeModal, setActiveModal] = useState("");
+  const [divCount, setDivCount] = useState(null);
   const [changeLetterBg, setChangeLetterBg] = useState({
     index: [],
     enable: false,
   });
 
-  console.log("divContents: ",divContents);
-  
   // const letterButtonsQuantity = 25;
   const letterButtonsQuantity = 20;
 
   // تابع تولید ۲۶ حرف نهایی (۲۰ رندوم + ۶ اضافه)
-  const generateFinalLetters = () => {
+  const generateFinalLetters = useCallback(() => {
     console.log("generateFinalLetters() is started");
-    
+
     // console.log("generateFinalLetters");
     // ۶ حرف اضافه دلخواه (می‌توانید تغییر دهید)
     const extraLetters = enigmas[stage].letters;
-    console.log("stage in generateFinalLetters():",stage);
-    
+    console.log("stage in generateFinalLetters():", stage);
 
     // انتخاب ۲۰ حرف رندوم
     const shuffled = [...letters];
@@ -102,7 +100,7 @@ const App = () => {
 
     // console.log("generateFinalLetters() is complited");
     return shuffledArray(combined);
-  };
+  }, [stage]);
 
   const handleDeleteLetter = useCallback(
     (letter, letterIndex) => {
@@ -128,7 +126,7 @@ const App = () => {
         setAvailableLetters(newAvailableLetters);
       }
     },
-    [divContents]
+    [divContents,availableLetters]
   );
 
   const areAllbuttonsField = useMemo(() => {
@@ -139,8 +137,8 @@ const App = () => {
     if (areAllbuttonsField) {
       const wordFormDivContents = divContents.join("");
       const wordFormAnswer = enigmas[stage].letters.join("");
-      console.log("correct word:",wordFormAnswer);
-      console.log("stage in use Effect:",stage);           
+      console.log("correct word:", wordFormAnswer);
+      console.log("stage in use Effect:", stage);
       if (wordFormAnswer === wordFormDivContents) {
         setValidate(true);
       } else {
@@ -150,6 +148,20 @@ const App = () => {
       setValidate(false);
     }
   }, [areAllbuttonsField, stage, divContents]);
+
+  //   const removeFromLetters = (letter,letterIndex) => {
+  //   const newAvailable = availableLetters.filter(
+  //     (_, index) => index !== letterIndex
+  //   );
+  //   setAvailableLetters(newAvailable);
+  // };
+
+  const removeFromLetters = (letter, letterIndex) => {
+    const newAvailable = availableLetters.filter(
+      (_, index) => index !== letterIndex
+    );
+    setAvailableLetters(newAvailable);
+  };
 
   const showFirstLetter = () => {
     if (score >= 500) {
@@ -163,63 +175,106 @@ const App = () => {
         index: [...prev.index, 0],
       }));
       setScore((e) => e - 500);
+      const getIndex = availableLetters.findIndex(
+        (letter) => firstLetter === letter
+      );
+      removeFromLetters(firstLetter, getIndex);
     } else {
       alert("پول کافی ندارید!");
     }
   };
 
   const showRandomLetter = () => {
-    console.log("showRandomLetter()");
     if (score >= 500) {
-      const randomLetterGenerator = () => {
+      const setRandomLetter = () => {
         const randomNum = Math.floor(Math.random() * divContents.length);
+        let randomPlace = divContents[randomNum];
 
-        if (divContents[randomNum] === "") {
-          // console.log("empty");
-          // console.log(divContents[randomNum], "in divContents");
-          const randomLetter = enigmas[stage].letters[randomNum];
-          // console.log(randomLetter);
-
+        if (randomPlace === "") {
+          const randomCorrectLetter = enigmas[stage].letters[randomNum];
           const newDivContents = [...divContents];
-          newDivContents[randomNum] = randomLetter;
+          newDivContents[randomNum] = randomCorrectLetter;
           setDivContents(newDivContents);
+
           setChangeLetterBg((prev) => ({
             ...prev,
             enable: true,
             index: [...prev.index, randomNum],
           }));
+
           setScore((e) => e - 500);
+
+          const getIndex = availableLetters.findIndex(
+            (letter) => randomCorrectLetter === letter
+          );
+          removeFromLetters(randomCorrectLetter, getIndex);
+
         } else {
-          return randomLetterGenerator();
+          return setRandomLetter();
         }
       };
-      randomLetterGenerator();
+      setRandomLetter();
     } else {
       alert("پول کافی ندارید!");
     }
   };
 
-  useEffect(() => {  
-    console.log("cheking if validate is true");  
+  useEffect(() => {
+    // console.log("cheking if validate is true");
     if (validate) {
-      console.log("setting activeModal state = victory ...");  
+      // console.log("setting activeModal state = victory ...");
       setTimeout(() => setActiveModal("victory"), 700);
     }
-    console.log("end of setting activeModal");  
+    // console.log("end of setting activeModal");
   }, [validate]);
 
-    useEffect(() => {
-      console.log("endGame is true. REALLY: ",endGame);
-  }, [endGame]);
+  // useEffect(() => {
+  //   console.log("endGame is true. REALLY: ", endGame);
+  // }, [endGame]);
 
   useEffect(() => {
-    console.log("check for last enima");   
+    setDivCount(enigmas[stage].letters.length);
+    console.log("check for last enima");
     const lastEnigma = enigmas.length - 1;
     if (stage === lastEnigma) {
       setEndGame(true);
-      console.log("changing endGame value"); 
-    }  
+      console.log("changing endGame value to true");
+    }
   }, [stage]);
+
+
+  // For LettersBox.jsx ------------------------------------------------------
+
+  // مقداردهی اولیه: تولید ۲۶ حرف و ایجاد div های خالی
+  useEffect(() => {
+    const initialLetters = generateFinalLetters();
+    setAvailableLetters(initialLetters);
+    setDivContents(Array(divCount).fill(""));
+  }, [divCount, generateFinalLetters]); // در صورت تغییر تعداد div ها، بازنشانی شود
+
+  // پیدا کردن کوچکترین ایندکسی که محتوای آن خالی است (اولین div از راست)
+  const findFirstEmptyDivIndex = () => {
+    return divContents.findIndex((content) => content === "");
+  };
+
+  // مدیریت کلیک روی دکمه حرف
+  const handleLetterClick = (letter, letterIndex) => {
+    const emptyIndex = findFirstEmptyDivIndex();
+    if (emptyIndex === -1) {
+      alert("همه خانه ها پر شده‌اند!");
+      return;
+    }
+    // console.log(letterIndex,"index");
+
+    // به‌روزرسانی div
+    const newDivContents = [...divContents];
+    newDivContents[emptyIndex] = letter;
+    setDivContents(newDivContents);
+    // availableLetters.map((l,index) =>{
+    //   console.log(`${l} is letter and ${index} is its index`);
+    // });
+    removeFromLetters(letter, letterIndex);
+  };
 
   return (
     <GameContext.Provider
@@ -236,6 +291,7 @@ const App = () => {
         setActiveModal,
         showFirstLetter,
         showRandomLetter,
+        handleLetterClick,
         changeLetterBg,
       }}
     >
@@ -252,13 +308,13 @@ const App = () => {
                   setValidate(false);
                   setActiveModal("");
                   setStage((e) => e + 1);
-                  setScore((e) => e + 1000);
+                  setScore((e) => e + 700);
                   setChangeLetterBg((prev) => ({
                     ...prev,
                     index: [],
                     enable: false,
                   }));
-                  console.log("stage:",stage);                  
+                  console.log("stage:", stage);
                 }}
                 stage={stage}
                 soundEnabled={true}
@@ -277,7 +333,7 @@ const App = () => {
               <HelpItem />
               <ScoreBadge score={score} />
               <EnigmaScreen stage={stage} />
-              <LowerPart />
+              <LowerPart stage={stage} />
             </MainLayout>
           </HelmetProvider>
         </ThemeProvider>

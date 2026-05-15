@@ -13,5 +13,6 @@ export const GameContext = createContext({
     setActiveModal: () => {},
     showFirstLetter: () => {},
     showRandomLetter: () => {},
-    changeLetterBg:false
+    handleLetterClick: () => {},
+    changeLetterBg:false,
 })

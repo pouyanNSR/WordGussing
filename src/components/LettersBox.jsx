@@ -4,52 +4,7 @@ import { GameContext } from "../context/index";
 import { enigmas } from "../data/answer";
 
 const LettersBox = () => {
-  const {
-    generateFinalLetters,
-    divContents,
-    setDivContents,
-    availableLetters,
-    setAvailableLetters,
-    stage,
-  } = useContext(GameContext);
-
-  const divCount = enigmas[stage].letters.length;
-
-  // مقداردهی اولیه: تولید ۲۶ حرف و ایجاد div های خالی
-  useEffect(() => {
-    const initialLetters = generateFinalLetters();
-    setAvailableLetters(initialLetters);
-    setDivContents(Array(divCount).fill(""));
-  }, [divCount]); // در صورت تغییر تعداد div ها، بازنشانی شود
-
-  // پیدا کردن کوچکترین ایندکسی که محتوای آن خالی است (اولین div از راست)
-  const findFirstEmptyDivIndex = () => {
-    return divContents.findIndex((content) => content === "");
-  };
-
-  // مدیریت کلیک روی دکمه حرف
-  const handleLetterClick = (letter, letterIndex) => {
-    const emptyIndex = findFirstEmptyDivIndex();
-    if (emptyIndex === -1) {
-      alert("همه div ها پر شده‌اند!");
-      return;
-    }
-    // console.log(letterIndex,"index");
-
-    // به‌روزرسانی div
-    const newDivContents = [...divContents];
-    newDivContents[emptyIndex] = letter;
-    setDivContents(newDivContents);
-    // availableLetters.map((l,index) =>{
-    //   console.log(`${l} is letter and ${index} is its index`);
-    // });
-
-    // حذف حرف از لیست دکمه‌های فعال
-    const newAvailable = availableLetters.filter(
-      (l, index) => index !== letterIndex
-    );
-    setAvailableLetters(newAvailable);
-  };
+  const { handleLetterClick, availableLetters,stage } = useContext(GameContext);
 
   const letterButtonStyle = {
     background:
@@ -79,12 +34,13 @@ const LettersBox = () => {
         sx={{
           width: "100%",
           display: "grid",
-          gridTemplateColumns:{ xs:"repeat(5,1fr)", md:"repeat(7,1fr)"},
+          gridTemplateColumns: { xs: "repeat(5,1fr)", md: "repeat(7,1fr)" },
           // gridTemplateColumns: "repeat(auto-fit,minmax(90px,1fr))",
           columnGap: 2,
           padding: { xs: "22px", md: "30px" },
           justifyContent: "center",
           alignItems: "center",
+          position:"relative"
         }}
       >
         {availableLetters.map((letter, index) => (
@@ -96,6 +52,24 @@ const LettersBox = () => {
             <Typography sx={letterStyle}>{letter}</Typography>
           </Button>
         ))}
+        <Box
+          // bgcolor={"red"}
+          sx={{
+            position: "absolute",
+            inset: "100% 0 0 0",
+            height: "10%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "rgb(202, 194, 194)",
+            pt: 1,
+            width:"30%",
+            margin:"auto"
+          }}
+        >
+          مرحله
+          <Typography fontWeight={700} sx={{ml:0.6}}>{stage + 1}</Typography>
+        </Box>
       </Box>
     </>
   );
