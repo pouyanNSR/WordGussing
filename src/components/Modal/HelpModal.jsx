@@ -3,27 +3,33 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Modal, Box, Typography, Button, styled } from "@mui/material";
 import { keyframes } from "@emotion/react";
 import { MonetizationOnRounded } from "@mui/icons-material";
-import { GameContext } from "../context/index";
+import { GameContext, useGameActions, useGameData } from "../../context/GameContext";
+import { useModalContext } from "../../context/ModalContext";
 
 // ─── کامپوننت مودال ───
-const HelpModal = ({ isOpen, onClose, stage }) => {
-  const { showFirstLetter, showRandomLetter } = useContext(GameContext);
+const HelpModal = () => {
+  // const { showFirstLetter, showRandomLetter } = useContext(GameContext);
+  const { showFirstLetter, showRandomLetter } = useGameActions();
+  const { help } = useModalContext();
+  // const { stage } = useGameData();
+
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const handleShowRandomLetter = async () => {
     try {
       await showRandomLetter();
-      onClose();
+      help.close();
     } catch (error) {
-      console.error(error,"error in handleShowRandomLetter()");
+      console.error(error, "error in handleShowRandomLetter()");
     }
   };
 
   const handleShowFirstLetter = async () => {
     try {
       await showFirstLetter();
-      onClose();
+      help.close();
     } catch (error) {
-      console.error(error,"error in handleShowFirstLetter()");
+      console.error(error, "error in handleShowFirstLetter()");
     }
   };
 
@@ -45,11 +51,12 @@ const HelpModal = ({ isOpen, onClose, stage }) => {
       background: "rgba(7, 248, 136, 0.99)",
     },
   };
+  // console.log(help,"help");
 
   return (
     <Modal
-      open={isOpen}
-      onClose={onClose}
+      open={help.isOpen}
+      onClose={() => help.close()}
       closeAfterTransition
       // بک‌دراپ شخصی‌سازی‌شده با انیمیشن
       BackdropComponent={(props) => (
@@ -75,7 +82,7 @@ const HelpModal = ({ isOpen, onClose, stage }) => {
       }}
     >
       <AnimatePresence>
-        {isOpen && (
+        {help.isOpen && (
           // ─── کارت اصلی با پرسپکتیو سه‌بعدی ───
           <motion.div
             initial={{ opacity: 0, scale: 0.5, rotateY: 90 }}
@@ -148,10 +155,7 @@ const HelpModal = ({ isOpen, onClose, stage }) => {
                       gap: "20px",
                     }}
                   >
-                    <Button
-                      onClick={handleShowFirstLetter}
-                      sx={helpItemsStyle}
-                    >
+                    <Button onClick={handleShowFirstLetter} sx={helpItemsStyle}>
                       <Typography
                         sx={{
                           color: "rgba(88, 3, 148, 0.96)",
@@ -244,7 +248,7 @@ const HelpModal = ({ isOpen, onClose, stage }) => {
                   style={{ display: "inline-block" }}
                 >
                   <Button
-                    onClick={onClose}
+                    onClick={() => help.close()}
                     variant="contained"
                     sx={{
                       px: 5,

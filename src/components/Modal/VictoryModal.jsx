@@ -1,7 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal, Box, Typography, Button, styled } from "@mui/material";
 import { keyframes } from "@emotion/react";
+import { useGameActions, useGameData, useGameState } from "../../context/GameContext";
+import { useModalContext } from "../../context/ModalContext";
 // import victorySound from "../assets/audio/tada.mp3"
 
 // ─── انیمیشن چرخش برای حاشیه درخشان ───
@@ -21,10 +23,22 @@ const GlowingBorder = styled(Box)(({ theme }) => ({
 }));
 
 // ─── کامپوننت مودال ───
-const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => {
+const VictoryModal = ({soundEnabled=true }) => {
   // console.log("endGame: ",endGame);
+  const {victory} = useModalContext()
+  // console.log(victory.isOpen,"victory");
+  
+  const {endGame,preventDoubleClick} = useGameState()
+  
+  const {stage} = useGameData()
+  const {goToNextStage} = useGameActions()
   
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleNext = () => {
+    victory.close()
+    goToNextStage()
+  }
 
   const handleMouseMove = (e) => {
     const card = e.currentTarget.getBoundingClientRect();
@@ -53,7 +67,7 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
 
 // پخش صدا هنگام باز شدن مودال
   useEffect(() => {
-    if (isOpen && soundEnabled && audioRef.current) {
+    if (victory.isOpen && soundEnabled && audioRef.current) {
       // ریست و پخش
       audioRef.current.currentTime = 0;
 
@@ -65,14 +79,16 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
         //   console.warn("⚠️ خطا در پخش صدا:", error);
         // });
     }
-  }, [isOpen, soundEnabled]);
+  }, [victory.isOpen, soundEnabled]);
 
   const handleMouseLeave = () => setMousePosition({ x: 0, y: 0 });
 
   return (
     <Modal
-      open={isOpen}
-      onClose={onClose}
+      // open={isOpen}
+      open={victory.isOpen}
+      // onClose={onClose}
+      onClose={() => handleNext()}
       closeAfterTransition
       // بک‌دراپ شخصی‌سازی‌شده با انیمیشن
       BackdropComponent={(props) => (
@@ -101,7 +117,7 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
       {/* <audio ref={audioRef} src={victorySound} preload="auto" style={{ display: "none" }}/> */}
       
       <AnimatePresence>
-        {isOpen && (
+        {victory.isOpen && (
           // ─── کارت اصلی با پرسپکتیو سه‌بعدی ───
           <motion.div
             initial={{ opacity: 0, scale: 0.5, rotateY: 90 }}
@@ -246,17 +262,21 @@ const VictoryModal = ({ isOpen, onClose, stage, soundEnabled=true,endGame }) => 
 
                 {/* دکمه بازی دوباره */}
                 <motion.div
-                  whileHover={{ scale: 1.05 }}
+                  initial={{scale:0,opacity:0}}
+                  animate={{scale:1,opacity:1}}
+                  transition={{delay:1.3}}
+                  // whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   style={{ display: "inline-block" }}
                 >
                   <Button
                     variant="contained"
-                    disabled={endGame}
+                    disabled={preventDoubleClick || endGame}
                     // onClick={endGame ? null : onClose}
                     onClick={() => {
                       console.log("Button Clicked✅");
-                      if(!endGame) onClose()
+                      // if(!endGame) onClose()
+                      if(!endGame) handleNext()
                     }}
                     sx={{
                       px: 5,

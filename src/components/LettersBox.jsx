@@ -1,10 +1,13 @@
 import { Box, Button, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { GameContext } from "../context/index";
+import { GameContext, useGameActions, useGameData, useGameState } from "../context/GameContext";
 import { enigmas } from "../data/answer";
 
 const LettersBox = () => {
-  const { handleLetterClick, availableLetters,stage } = useContext(GameContext);
+  const {availableLetters } = useGameState();
+  const {handleLetterClick} = useGameActions();
+  const { stage } = useGameData();
+
 
   const letterButtonStyle = {
     background:

@@ -1,8 +1,9 @@
 import { Box, Typography } from "@mui/material";
 import { memo } from "react";
 import { enigmas } from "../data/answer";
-const EnigmaScreen = memo(({ stage }) => {
-  // console.log("EnigmaScreen");
+import { useGameData } from "../context/GameContext";
+const EnigmaScreen = memo(() => {
+  const {stage} = useGameData()
   return (
     <Box
       sx={{

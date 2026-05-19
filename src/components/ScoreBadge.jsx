@@ -1,8 +1,10 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import { useGameState } from '../context/GameContext';
 
-const ScoreBadge = ({ score = 0, icon: IconComponent = MonetizationOnIcon }) => {
+const ScoreBadge = ({icon: IconComponent = MonetizationOnIcon }) => {
+  const {score} = useGameState()
   return (
     <Box
       sx={{

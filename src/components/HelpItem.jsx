@@ -1,19 +1,12 @@
 import {
-  Box,
   Button,
   keyframes,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
-import { warning } from "motion";
-import { useContext, useEffect, useState } from "react";
-import { GameContext } from "../context/index";
+import { useModalContext } from "../context/ModalContext";
 
 const HelpItem = () => {
-  const { setActiveModal } = useContext(GameContext);
-  const [windowWidth, setWindowWidth] = useState(null);
-
-  // console.log(windowWidth);
+  const { help} = useModalContext()
 
   const moving = keyframes`
     from {
@@ -25,7 +18,7 @@ const HelpItem = () => {
   `;
   return (
     <Button
-      onClick={() => setActiveModal("help")}
+      onClick={() => help.open()}
       sx={{
         position: "absolute",
         bottom: "5%",

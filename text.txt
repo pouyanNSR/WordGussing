@@ -1,46 +1,123 @@
-      <Grid
-        container
-        sx={buttonContainerStyle}
-        // spacing={{ xs: 0.5, sm: 1 }}
-        // justifyContent="center"
-        // sx={{
-        //   maxWidth: { xs: "300px", sm: "400px", md: "500px" },
-        //   backgroundColor: "rgb(241, 11, 199)",
-        //   p: 1,
-        //   borderRadius: 1,
-        // }}
-      >
-        {divContents.map((content, index) => (
-          <Grid item xs key={index} className="inner-button-container">
-            <Button
-              onClick={() => handleDeleteLetter(content, index)}
-              sx={letterButtonStyle(index, changeLetterBg.enable)}
-            >
-              {content}
-            </Button>
-          </Grid>
-        ))}
-      </Grid>
+// contexts/GameContext.jsx - همه Contextها در یک فایل
+import { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 
+// ۱. ساخت Contextهای جداگانه
+const GameDataContext = createContext(null);
+const GameStateContext = createContext(null);
+const GameActionsContext = createContext(null);
 
+// ۲. Provider اصلی که همه را مدیریت می‌کند
+export function GameProvider({ children }) {
+  // ========= DATA STATE =========
+  const [enigmas, setEnigmas] = useState([]);
+  const [currentStageIndex, setCurrentStageIndex] = useState(0);
 
-          <Box
-      sx={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgb(23, 102, 43)",
-      }}
-      className="buttons-container"
-    >
-      <Box sx={buttonContainerStyle} className="button-container">
-        {divContents.map((content, index) => (
-          <Button
-            key={index}
-            onClick={() => handleDeleteLetter(content, index)}
-            sx={letterButtonStyle(index, changeLetterBg.enable)}
-          >
-            {content}
-          </Button>
-        ))}
-      </Box>
-    </Box>
+  useEffect(() => {
+    fetch('http://localhost:3001/enigmas')
+      .then(res => res.json())
+      .then(data => setEnigmas(data));
+  }, []);
+
+  const currentStageData = useMemo(
+    () => enigmas[currentStageIndex] || null,
+    [enigmas, currentStageIndex]
+  );
+
+  // ========= GAME STATE =========
+  const [guessedLetters, setGuessedLetters] = useState([]);
+  const [isValidate, setIsValidate] = useState(false);
+  const [showVictoryModal, setShowVictoryModal] = useState(false);
+  const [screen, setScreen] = useState('menu');
+
+  // ========= ACTIONS =========
+  const handleLetterClick = useCallback((letter) => {
+    if (!currentStageData) return;
+    
+    const currentWord = currentStageData.name;
+    if (guessedLetters.length < currentWord.length) {
+      const newGuessed = [...guessedLetters, letter];
+      setGuessedLetters(newGuessed);
+      
+      if (newGuessed.length === currentWord.length) {
+        const formedWord = newGuessed.join('');
+        const isValid = formedWord === currentWord;
+        setIsValidate(isValid);
+        setShowVictoryModal(isValid);
+      }
+    }
+  }, [currentStageData, guessedLetters]);
+
+  const handleStageSelect = useCallback((index) => {
+    setCurrentStageIndex(index);
+    setGuessedLetters([]);
+    setIsValidate(false);
+    setShowVictoryModal(false);
+    setScreen('play');
+  }, []);
+
+  const goToNextStage = useCallback(() => {
+    setShowVictoryModal(false);
+    setIsValidate(false);
+    setGuessedLetters([]);
+    setCurrentStageIndex(prev => prev + 1);
+  }, []);
+
+  const goToMenu = useCallback(() => {
+    setScreen('menu');
+    setGuessedLetters([]);
+    setIsValidate(false);
+    setShowVictoryModal(false);
+  }, []);
+
+  // ========= MEMOIZE VALUES =========
+  const dataValue = useMemo(() => ({
+    enigmas,
+    currentStageIndex,
+    currentStageData
+  }), [enigmas, currentStageIndex, currentStageData]);
+
+  const stateValue = useMemo(() => ({
+    guessedLetters,
+    isValidate,
+    showVictoryModal,
+    screen
+  }), [guessedLetters, isValidate, showVictoryModal, screen]);
+
+  const actionsValue = useMemo(() => ({
+    handleLetterClick,
+    handleStageSelect,
+    goToNextStage,
+    goToMenu,
+    setScreen  // اگر نیاز به setScreen در کامپوننت‌ها دارید
+  }), [handleLetterClick, handleStageSelect, goToNextStage, goToMenu]);
+
+  // ========= RENDER PROVIDERS =========
+  return (
+    <GameDataContext.Provider value={dataValue}>
+      <GameStateContext.Provider value={stateValue}>
+        <GameActionsContext.Provider value={actionsValue}>
+          {children}
+        </GameActionsContext.Provider>
+      </GameStateContext.Provider>
+    </GameDataContext.Provider>
+  );
+}
+
+// ۳. هوک‌های اختصاصی
+export const useGameData = () => {
+  const context = useContext(GameDataContext);
+  if (!context) throw new Error('useGameData must be used within GameProvider');
+  return context;
+};
+
+export const useGameState = () => {
+  const context = useContext(GameStateContext);
+  if (!context) throw new Error('useGameState must be used within GameProvider');
+  return context;
+};
+
+export const useGameActions = () => {
+  const context = useContext(GameActionsContext);
+  if (!context) throw new Error('useGameActions must be used within GameProvider');
+  return context;
+};
