@@ -9,9 +9,7 @@ import {
 import { letters } from "../data/letters";
 import { enigmas } from "../data/answer";
 import { generateLetters } from "../utils/generateLetters";
-import {
-  useLetterHandlers
-} from "../hooks/useLetterHandlers";
+import { useLetterHandlers } from "../hooks/useLetterHandlers";
 import { removeFromLetters } from "../utils/letterDeleter";
 
 export const GameDataContext = createContext(null);
@@ -25,15 +23,22 @@ export function GameProvider({ children }) {
   const currentStageData = useMemo(() => enigmas[stage] || null, [stage]);
 
   // ========= GAME STATE =========
+  const [screen, setScreen] = useState("");
   const [divContents, setDivContents] = useState([]); // محتوای div ها (آرایه رشته‌ها)
   const [validate, setValidate] = useState(null);
+  const [invalidAnswer, setInvalidAnswer] = useState(false);
   const [availableLetters, setAvailableLetters] = useState([]); // حروف باقی‌مانده برای کلیک
   const [endGame, setEndGame] = useState(false);
   const [score, setScore] = useState(0);
   const [preventDoubleClick, setPreventDoubleClick] = useState(false);
+  const [openStages, setOpenStages] = useState(0); 
+  // const [difficultyProperties, setDifficultyProperties] = useState({
+  //   bg:"",
+  //   lable:""
+  // })
   const [changeLetterBg, setChangeLetterBg] = useState({
     index: [],
-    enable: false,
+    enable: "",
   });
 
   // ========= ACTIONS =========
@@ -44,7 +49,6 @@ export function GameProvider({ children }) {
     setDivContents,
     setAvailableLetters
   );
-
   const letterButtonsQuantity = 20;
 
   useEffect(() => {
@@ -52,14 +56,23 @@ export function GameProvider({ children }) {
     if (areAllbuttonsFilled) {
       const wordFormDivContents = divContents.join("");
       const wordFormAnswer = currentStageData.letters.join("");
-      setValidate(wordFormAnswer === wordFormDivContents);
+      if (wordFormAnswer === wordFormDivContents) {
+        setValidate(true);
+      } else {
+        setInvalidAnswer(true);
+        setTimeout(() => {
+          setInvalidAnswer(false);
+        }, 800);
+      }
     } else {
       setValidate(false);
     }
   }, [stage, divContents]);
 
   useEffect(() => {
+    // const stageDifficulty = enigmas[stage].difficulty;
     const lastEnigma = enigmas.length - 1;
+    // handletDifficultyProperties(stageDifficulty)
     if (stage === lastEnigma) {
       setEndGame(true);
     }
@@ -76,6 +89,32 @@ export function GameProvider({ children }) {
     setAvailableLetters(initialAvailable);
     setDivContents(Array(firstSatgeData.letters.length).fill(""));
   }, []);
+
+
+  const selectStage = useCallback(
+    (index) => {
+      setPreventDoubleClick(true);
+
+      const nextWordLetters = enigmas[index].letters;
+      const nextAvailableLetters = generateLetters(
+        nextWordLetters,
+        letters,
+        letterButtonsQuantity
+      );
+
+      // همهٔ stateها در یک دسته به‌روز می‌شوند
+      setDivContents(Array(enigmas[index].letters.length).fill(""));
+      setValidate(false);
+      setStage(index);
+      setChangeLetterBg({ index: [], enable: "" });
+      setAvailableLetters(nextAvailableLetters);
+      setScreen("scene");
+      setTimeout(() => {
+        setPreventDoubleClick(false);
+      }, 1200);
+    },
+    [stage, enigmas, letters, generateLetters, letterButtonsQuantity]
+  );
 
   const goToNextStage = useCallback(() => {
     setPreventDoubleClick(true);
@@ -94,13 +133,19 @@ export function GameProvider({ children }) {
     setValidate(false);
     setStage(nextStage);
     setScore((prev) => prev + 700);
-    setChangeLetterBg({ index: [], enable: false });
-    setAvailableLetters(nextAvailableLetters); 
+    setChangeLetterBg({ index: [], enable: "" });
+    setAvailableLetters(nextAvailableLetters);
     setTimeout(() => {
       setPreventDoubleClick(false);
     }, 1200);
   }, [stage, enigmas, letters, generateLetters, letterButtonsQuantity]);
-  
+
+  const backToBoard = () => {
+    setScreen("board");
+  };
+
+
+
   const showFirstLetter = useCallback(() => {
     if (score >= 500) {
       const firstLetter = currentStageData.letters[0];
@@ -109,7 +154,7 @@ export function GameProvider({ children }) {
       setDivContents(newDivContents);
       setChangeLetterBg((prev) => ({
         ...prev,
-        enable: true,
+        enable: "helper",
         index: [...prev.index, 0],
       }));
       setScore((e) => e - 500);
@@ -136,7 +181,7 @@ export function GameProvider({ children }) {
 
           setChangeLetterBg((prev) => ({
             ...prev,
-            enable: true,
+            enable: "helper",
             index: [...prev.index, randomNum],
           }));
 
@@ -145,7 +190,7 @@ export function GameProvider({ children }) {
           const getIndex = availableLetters.findIndex(
             (letter) => randomCorrectLetter === letter
           );
-          setAvailableLetters(removeFromLetters(getIndex,availableLetters))
+          setAvailableLetters(removeFromLetters(getIndex, availableLetters));
         } else {
           return setRandomLetter();
         }
@@ -160,8 +205,9 @@ export function GameProvider({ children }) {
   const dataValue = useMemo(
     () => ({
       stage,
+      screen,
     }),
-    [stage]
+    [stage, screen]
   );
 
   const stateValue = useMemo(
@@ -173,6 +219,8 @@ export function GameProvider({ children }) {
       score,
       preventDoubleClick,
       changeLetterBg,
+      invalidAnswer,
+      // difficultyProperties
     }),
     [
       divContents,
@@ -182,6 +230,8 @@ export function GameProvider({ children }) {
       score,
       preventDoubleClick,
       changeLetterBg,
+      invalidAnswer,
+      // difficultyProperties
     ]
   );
 
@@ -192,6 +242,9 @@ export function GameProvider({ children }) {
       showRandomLetter,
       showFirstLetter,
       goToNextStage,
+      selectStage,
+      backToBoard,
+      // handletDifficultyProperties
     }),
     [
       handleLetterClick,
@@ -199,6 +252,9 @@ export function GameProvider({ children }) {
       showFirstLetter,
       showRandomLetter,
       goToNextStage,
+      selectStage,
+      backToBoard,
+      // handletDifficultyProperties
     ]
   );
   // console.log(dataValue);
@@ -229,6 +285,7 @@ export const useGameData = () => {
     console.warn("useGameState called outside GameStateProvider");
     return {
       stage: null,
+      screen: null,
     };
   }
   return context;
@@ -244,7 +301,7 @@ export const useGameState = () => {
       availableLetters: [],
       endGame: false,
       score: 0,
-      changeLetterBg: { index: [], enable: false },
+      changeLetterBg: { index: [], enable: "" },
     };
   }
   return context;

@@ -1,17 +1,38 @@
 import { Box, Button, Typography } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-import { GameContext, useGameActions, useGameData, useGameState } from "../context/GameContext";
-import { enigmas } from "../data/answer";
+import { useEffect, useRef, useState } from "react";
+import {
+  useGameActions,
+  useGameData,
+  useGameState,
+} from "../../context/GameContext";
+import Typed from "typed.js";
 
 const LettersBox = () => {
-  const {availableLetters } = useGameState();
-  const {handleLetterClick} = useGameActions();
+  const { availableLetters } = useGameState();
+  const { handleLetterClick } = useGameActions();
   const { stage } = useGameData();
+  const nameEl = useRef(null);
 
+
+  useEffect(() => {
+    const stageNum = ` مرحله ${stage + 1}`;
+    const typedName = new Typed(nameEl.current, {
+      strings: [stageNum],
+      startDelay: 1000,
+      typeSpeed: 110,
+      backSpeed: 80,
+      backDelay: 120,
+      showCursor: false,
+    });
+
+    return () => {
+      typedName.destroy();
+    };
+  }, [stage]);
 
   const letterButtonStyle = {
     background:
-      "linear-gradient(165deg,rgba(252, 250, 250, 0.92) 0%,rgb(255, 217, 2) 50%)",
+      "linear-gradient(165deg,rgba(252, 250, 250, 0.92) 10%,rgb(255, 217, 2) 60%)",
     height: { xs: "auto", md: "40px" },
     color: "secondary.main",
     boxShadow: "0 0 8px rgba(0, 0, 0, 0.66)",
@@ -34,6 +55,7 @@ const LettersBox = () => {
   return (
     <>
       <Box
+
         sx={{
           width: "100%",
           display: "grid",
@@ -43,21 +65,27 @@ const LettersBox = () => {
           padding: { xs: "22px", md: "30px" },
           justifyContent: "center",
           alignItems: "center",
-          position:"relative"
+          position: "relative",
         }}
       >
         {availableLetters.map((letter, index) => (
-          <Button
-            key={index}
-            onClick={() => handleLetterClick(letter, index)}
-            sx={letterButtonStyle}
-          >
-            <Typography sx={letterStyle}>{letter}</Typography>
-          </Button>
+          <Box>
+            <Button
+              fullWidth
+              key={index}
+              onClick={() => handleLetterClick(letter, index)}
+              sx={letterButtonStyle}
+            >
+              <Typography sx={letterStyle}>{letter}</Typography>
+            </Button>
+          </Box>
         ))}
         <Box
+          ref={nameEl}
           // bgcolor={"red"}
           sx={{
+            textWrap:"nowrap",
+            fontSize: "18px",
             position: "absolute",
             inset: "100% 0 0 0",
             height: "10%",
@@ -66,13 +94,11 @@ const LettersBox = () => {
             alignItems: "center",
             color: "rgb(202, 194, 194)",
             pt: 1,
-            width:"30%",
-            margin:"auto"
+            width: "30%",
+            margin: "auto",
+            textShadow: "0 0 4px rgb(241, 230, 230)",
           }}
-        >
-          مرحله
-          <Typography fontWeight={700} sx={{ml:0.6}}>{stage + 1}</Typography>
-        </Box>
+        ></Box>
       </Box>
     </>
   );

@@ -41,7 +41,7 @@ const App = () => {
           <ThemeProvider theme={theme}>
             <HelmetProvider>
               <Helmet>
-                <title>Bazi</title>
+                <title>Word Guessing</title>
               </Helmet>
               <MainLayout />
             </HelmetProvider>

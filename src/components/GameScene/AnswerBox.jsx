@@ -2,26 +2,33 @@ import { Button, Grid } from "@mui/material";
 import {
   useGameActions,
   useGameState,
-} from "../context/GameContext";
+} from "../../context/GameContext";
 
 const AnswerBox = () => {
   const { handleDeleteLetter } = useGameActions();
-  const { validate, divContents, changeLetterBg } = useGameState();
+  const { validate, divContents, changeLetterBg,invalidAnswer } = useGameState();
 
   const letterButtonStyle = (index, enable) => {
     const isInclude = changeLetterBg.index.some((item) => item === index);
+    const backgroundSetter = () => {
+      if (validate) {
+        return "rgb(4, 156, 19)"
+      }
+      else if(enable === "helper"  && isInclude){
+        return "rgb(8, 91, 235)"
+      }
+      else{
+        return "primary.main"
+      }
+    }
 
     return {
-      backgroundColor: validate
-        ? "rgb(4, 156, 19)"
-        : enable && isInclude
-        ? "rgb(8, 91, 235)"
-        : "primary.main",
+      backgroundColor: backgroundSetter(),
       // flex: "0 0 25%",
-      height: "80%",
+      height: "100%",
       width: "auto",
       minWidth: { xs: "70%", md: "65px" },
-      outline: "5px solid rgb(98, 39, 3)",
+      outline: invalidAnswer ? "5px solid rgb(244, 0, 0)" : "5px solid rgb(98, 39, 3)",
       borderRadius: "5px",
       color: "rgb(255, 255, 255)",
       display: "flex",
@@ -31,6 +38,7 @@ const AnswerBox = () => {
       fontWeight: "700",
       textShadow: "0 0 4px rgb(42, 19, 5)",
       boxShadow: "0 0 4px inset rgb(58, 23, 6)",
+      transition:"all 0.2s ease-in-out",
       padding: 0,
       "&:hover": {
         backgroundColor: "rgb(76, 4, 4)",
@@ -45,9 +53,10 @@ const AnswerBox = () => {
     <Grid
       container
       sx={{
-        width: { xs: "100%", md: "max-content" },
+        width: { xs: "100%", md: "100%",lg:"max-content" },
         m: "auto",
-        height: "100%",
+        minHeight:"30px",
+        height: "86%",
         gap: { xs: 0, md: 4 },
       }}
     >
@@ -66,7 +75,7 @@ const AnswerBox = () => {
             className="inner-button-container"
           >
             <Button
-              onClick={() => disabled ? null :handleDeleteLetter(content, index)}
+              onClick={() => disabled ? null : handleDeleteLetter(content, index)}
               sx={letterButtonStyle(index, changeLetterBg.enable)}
             >
               {content}

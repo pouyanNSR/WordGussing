@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal, Box, Typography, Button, styled } from "@mui/material";
 import { keyframes } from "@emotion/react";
@@ -34,6 +34,12 @@ const VictoryModal = ({soundEnabled=true }) => {
   const {goToNextStage} = useGameActions()
   
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const victoryStickers = ["😍","🎗️","👏","🔥","👑","🥇"]
+  const randomSticker = Math.floor( Math.random() * victoryStickers.length)
+  const chooseRandomVictorySticker = useCallback(() => {
+    return victoryStickers[randomSticker]
+  },[stage])
 
   const handleNext = () => {
     victory.close()
@@ -202,7 +208,7 @@ const VictoryModal = ({soundEnabled=true }) => {
                     filter: "drop-shadow(0 0 15px rgba(254, 249, 218, 0.8))",
                   }}
                 > 
-                  {!endGame ? "😍" :"🏆"}
+                  {!endGame ? chooseRandomVictorySticker() :"🏆"}
                 </motion.div>
 
                 {/* متن تبریک */}

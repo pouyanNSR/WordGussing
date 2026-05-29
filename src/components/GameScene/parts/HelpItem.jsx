@@ -3,7 +3,7 @@ import {
   keyframes,
   Typography,
 } from "@mui/material";
-import { useModalContext } from "../context/ModalContext";
+import { useModalContext } from "../../../context/ModalContext";
 
 const HelpItem = () => {
   const { help} = useModalContext()
@@ -36,6 +36,7 @@ const HelpItem = () => {
         alignItems: "center",
         borderRadius: "30px 30px 0px 30px",
         color: "whitesmoke",
+        zIndex:1000,
         transition: "0.3s ease",
         animation: `${moving} 3.5s ease infinite`,
         "&:hover": {
@@ -50,7 +51,7 @@ const HelpItem = () => {
         },
       }}
     >
-      <Typography variant="h6" sx={{ whiteSpace: "wrap", lineHeight: "25px" }}>
+      <Typography sx={{ whiteSpace: "wrap", lineHeight: "18px" , }}>
         کمک بگیر!
       </Typography>
     </Button>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import { useGameState } from '../context/GameContext';
+import { useGameState } from '../../../context/GameContext';
 
 const ScoreBadge = ({icon: IconComponent = MonetizationOnIcon }) => {
   const {score} = useGameState()
@@ -32,6 +32,7 @@ const ScoreBadge = ({icon: IconComponent = MonetizationOnIcon }) => {
         transition: 'all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
         cursor: 'default',
         userSelect: 'none',
+        zIndex:1,
         '&:hover': {
           transform: 'perspective(600px) rotateY(0deg) scale(1.07)',
           boxShadow: `

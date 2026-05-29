@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal, Box, Typography, Button, styled } from "@mui/material";
 import { keyframes } from "@emotion/react";
 import { MonetizationOnRounded } from "@mui/icons-material";
-import { GameContext, useGameActions, useGameData } from "../../context/GameContext";
+import { useGameActions } from "../../context/GameContext";
 import { useModalContext } from "../../context/ModalContext";
 
 // ─── کامپوننت مودال ───
@@ -13,7 +12,6 @@ const HelpModal = () => {
   const { help } = useModalContext();
   // const { stage } = useGameData();
 
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const handleShowRandomLetter = async () => {
     try {
@@ -160,7 +158,7 @@ const HelpModal = () => {
                         sx={{
                           color: "rgba(88, 3, 148, 0.96)",
                           fontWeight: 800,
-                          fontSize: 19,
+                          fontSize: {xs:15,md:19},
                           letterSpacing: "2px",
                         }}
                       >
@@ -203,7 +201,7 @@ const HelpModal = () => {
                         sx={{
                           color: "rgba(88, 3, 148, 0.96)",
                           fontWeight: 800,
-                          fontSize: 19,
+                          fontSize: {xs:15,md:19},
                           letterSpacing: "2px",
                         }}
                       >

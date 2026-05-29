@@ -1,42 +1,110 @@
 export const enigmas = [
     {
-        name:"انآقا",
-        image:"👨‍🦰 💩",
-        letters:["ا","ن","آ","ق","ا"]
+        name:"کاشف",
+        image:"🧑‍🍳 K",
+        letters:["ک","ا","ش","ف"],
+        difficulty:"easy"
     },
     {
-        name:"دماغدراز",
-        image:"📏 👃",
-        letters:["د","م","ا","غ","د","ر","ا","ز"]
+        name:"بادگیر",
+        image:"📎 💨",
+        letters:["ب","ا","د","گ","ی","ر"],
+        difficulty:"normal"
+    },  
+    {
+        name:"دشمن",
+        image:"💩 🕯️🕯️",
+        letters:["د","ش","م","ن"],
+        difficulty:"hard"
     },
     {
-        name:"ترمال",
-        image:"💰 💩",
-        letters:["ت","ر","م","ا","ل"]
+        name:"مختار",
+        image:"🎸 🧠",
+        letters:["م","خ","ت","ا","ر"],
+        difficulty:"easy"
     },
     {
-        name:"زنیکه",
-        image:"1️⃣ 👩‍🦰",
-        letters:["ز","ن","ی","ک","ه"]
+        name:"مخصوص",
+        image:"🆘 🧠",
+        letters:["م","خ","ص","و","ص"],
+        difficulty:"easy"
     },
     {
         name:"یوزارسیف",
-        image:"sif 😭 🫵",
-        letters:["ی","و","ز","ا","ر","س","ی","ف"]
+        image:"safe 😭 🫵",
+        letters:["ی","و","ز","ا","ر","س","ی","ف"],
+        difficulty:"normal"
     },
     {
-        name:"پدرسگ",
-        image:"🐕 👨‍🍼",
-        letters:["پ","د","ر","س","گ"]
+        name:"مترجم",
+        image:"💎 💩 💇",
+        letters:["م","ت","ر","ج","م"],
+        difficulty:"normal"
     },
     {
-        name:"شاشبند",
-        image:"🪢 🚽",
-        letters:["ش","ا","ش","ب","ن","د"]
+        name:"مکرر",
+        image:"🪚 🦻 💇‍♀️",
+        letters:["م","ک","ر","ر"],
+        difficulty:"hard"
     },
     {
-        name:"زهره",
-        image:"🌅",
-        letters:["ز","ه","ر","ه"]
+        name:"خاکشیر",
+        image:"🦁 🐷",
+        letters:["خ","ا","ک","ش","ی","ر"],
+        difficulty:"easy"
+    },
+    {
+        name:"تفکر",
+        image:"🧑‍🦯‍➡️ 🦭 🔚",
+        letters:["ت","ف","ک","ر"],
+        difficulty:"hard"
+    },
+    {
+        name:"مسافر",
+        image:"👨‍🦱 📴 🐁",
+        letters:["م","س","ا","ف","ر"],
+        difficulty:"easy"
+    },
+    {
+        name:"مطلع",
+        image:"🪤 💇‍♂️",
+        letters:["م","ط","ل","ع"],
+        difficulty:"normal"
+    },
+    {
+        name:"گاوچران",
+        image:"🦵 🤷 🐄",
+        letters:["گ","ا","و","چ","ر","ا","ن"],
+        difficulty:"normal"
+    },
+    {
+        name:"کاشان",
+        image:"🪮 K",
+        letters:["ک","ا","ش","ا","ن"],
+        difficulty:"easy"
+    },
+    {
+        name:"آپشن",
+        image:"🥖 🦟 ⬆️",
+        letters:["آ","پ","ش","ن"],
+        difficulty:"hard"
+    },
+    {
+        name:"مقصر",
+        image:"🏰 💇‍♀️",
+        letters:["م","ق","ص","ر"],
+        difficulty:"normal"
+    },
+    {
+        name:"مردد",
+        image:"👨‍🍼 👣 💇‍♀️",
+        letters:["م","ر","د","د"],
+        difficulty:"hard"
+    },
+    {
+        name:"خلسه",
+        image:"3️⃣ 🤪",
+        letters:["خ","ل","س","ه"],
+        difficulty:"hard"
     },
 ]
