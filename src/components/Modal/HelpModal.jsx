@@ -18,7 +18,7 @@ const HelpModal = () => {
       await showRandomLetter();
       help.close();
     } catch (error) {
-      console.error(error, "error in handleShowRandomLetter()");
+      console.log(error, "error in handleShowRandomLetter()");
     }
   };
 
@@ -27,7 +27,7 @@ const HelpModal = () => {
       await showFirstLetter();
       help.close();
     } catch (error) {
-      console.error(error, "error in handleShowFirstLetter()");
+      console.log(error, "error in handleShowFirstLetter()");
     }
   };
 

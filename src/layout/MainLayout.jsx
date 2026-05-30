@@ -12,8 +12,10 @@ const MainLayout = () => {
         return <Board/>
       case "scene":
         return <Scene/>    
+      case "beginning":
+        return <WelcomPage/> 
       default:
-        return <WelcomPage/>
+        return <WelcomPage/> 
     }
   }
   return (

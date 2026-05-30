@@ -196,7 +196,7 @@ const StarsLayer = () => {
 
 // ---------- کامپوننت اصلی ----------
 const WelcomePage = () => {
-  const { backToBoard } = useGameActions();
+  const { goToScreen } = useGameActions();
   return (
     <StyledBackground>
       {/* لایه ذرات و ستاره‌ها */}
@@ -259,7 +259,7 @@ const WelcomePage = () => {
           style={{ perspective: "500px" }}
         >
           <StyledButton
-            onClick={backToBoard} // مسیردهی به صفحه مراحل
+            onClick={()=> goToScreen("board")} // مسیردهی به صفحه مراحل
             size="large"
             disableRipple
           >

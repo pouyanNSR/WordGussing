@@ -5,17 +5,13 @@ import { AnimatePresence, motion } from "motion/react";
 import { GradientAndShadowStyle } from "../../data/dynamicStyles";
 import {
   useGameActions,
-  useGameData,
   useGameState,
 } from "../../context/GameContext";
 import { handletDifficultyProperties } from "../../utils/handleDifficultyProperties";
 
 const GameStageButtons = () => {
   const { selectStage } = useGameActions();
-  // const { selectStage,handletDifficultyProperties } = useGameActions();
-
-  // const { difficultyProperties } = useGameState();
-  // تبدیل Button مادی به کامپوننت متحرک
+  const { solvedEnigmas } = useGameState();
   const MotionButton = motion(Button);
   const MotionSpan = motion(Typography);
 
@@ -87,6 +83,7 @@ const GameStageButtons = () => {
         );
         const randomGradShadow = GradientAndShadowStyle[randomIndex];
         const {background,name} = handletDifficultyProperties(index);
+        const isSolved = solvedEnigmas.some( item => item === index)
         // console.log(name);
         
 
@@ -118,16 +115,13 @@ const GameStageButtons = () => {
                     fontWeight: "bold",
                     fontFamily: "tanha",
                     borderRadius: { xs: "8px", md: "30px" },
-                    // background:
-                    //   "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
-                    // boxShadow: "0 8px 32px rgba(0, 242, 254, 0.5)",
                     color: "#fff",
                     textTransform: "none",
                     display: "flex",
                     flexDirection: "column",
                     outline: {
-                      xs: "3px solid rgb(231, 246, 236)",
-                      md: "6px solid rgb(231, 246, 236)",
+                      xs: `3px solid ${isSolved ? "rgb(13, 189, 72)" : "rgb(231, 246, 236)"}`,
+                      md: `6px solid ${isSolved ? "rgb(13, 189, 72)" : "rgb(231, 246, 236)"}`,
                     },
                     // filter:"saturate(160%)",
                     boxShadow: "0 0 14px inset rgba(70, 73, 70, 0.68)",
@@ -152,14 +146,14 @@ const GameStageButtons = () => {
                   rotateY: 0,
                   rotateX: 0,
                 }}
-                // کلیک برای شروع مرحله (فعلا alert)
-                // onClick={() => alert(`شروع ${level.label}`)}
                 onClick={() => selectStage(index)}
               >
                 <MotionSpan
                   sx={{
                     fontSize: { xs: "1rem", md: "2.5rem" },
                     overflow: "hidden",
+                    color: isSolved ? "rgb(17, 252, 37)" : null,
+                    textShadow: isSolved ? "0 0 6px rgb(19, 20, 19)" : null
                   }}
                   // animate={{y:[0,-3,0]}}
                   animate={{ scale: [1, 1.1, 1] }}
@@ -174,7 +168,7 @@ const GameStageButtons = () => {
                   //   transition: { duration: 0.4 },
                   // }}
                 >
-                  {enigma.image}
+                  {isSolved ? "حل شده" : enigma.image}
                 </MotionSpan>
                 <MotionSpan sx={{ fontSize: { xs: "1rem", md: "2.5rem" } }}>
                   {index + 1} مرحله

@@ -1,110 +1,128 @@
 export const enigmas = [
-    {
-        name:"کاشف",
-        image:"🧑‍🍳 K",
-        letters:["ک","ا","ش","ف"],
-        difficulty:"easy"
-    },
-    {
-        name:"بادگیر",
-        image:"📎 💨",
-        letters:["ب","ا","د","گ","ی","ر"],
-        difficulty:"normal"
-    },  
-    {
-        name:"دشمن",
-        image:"💩 🕯️🕯️",
-        letters:["د","ش","م","ن"],
-        difficulty:"hard"
-    },
-    {
-        name:"مختار",
-        image:"🎸 🧠",
-        letters:["م","خ","ت","ا","ر"],
-        difficulty:"easy"
-    },
-    {
-        name:"مخصوص",
-        image:"🆘 🧠",
-        letters:["م","خ","ص","و","ص"],
-        difficulty:"easy"
-    },
-    {
-        name:"یوزارسیف",
-        image:"safe 😭 🫵",
-        letters:["ی","و","ز","ا","ر","س","ی","ف"],
-        difficulty:"normal"
-    },
-    {
-        name:"مترجم",
-        image:"💎 💩 💇",
-        letters:["م","ت","ر","ج","م"],
-        difficulty:"normal"
-    },
-    {
-        name:"مکرر",
-        image:"🪚 🦻 💇‍♀️",
-        letters:["م","ک","ر","ر"],
-        difficulty:"hard"
-    },
-    {
-        name:"خاکشیر",
-        image:"🦁 🐷",
-        letters:["خ","ا","ک","ش","ی","ر"],
-        difficulty:"easy"
-    },
-    {
-        name:"تفکر",
-        image:"🧑‍🦯‍➡️ 🦭 🔚",
-        letters:["ت","ف","ک","ر"],
-        difficulty:"hard"
-    },
-    {
-        name:"مسافر",
-        image:"👨‍🦱 📴 🐁",
-        letters:["م","س","ا","ف","ر"],
-        difficulty:"easy"
-    },
-    {
-        name:"مطلع",
-        image:"🪤 💇‍♂️",
-        letters:["م","ط","ل","ع"],
-        difficulty:"normal"
-    },
-    {
-        name:"گاوچران",
-        image:"🦵 🤷 🐄",
-        letters:["گ","ا","و","چ","ر","ا","ن"],
-        difficulty:"normal"
-    },
-    {
-        name:"کاشان",
-        image:"🪮 K",
-        letters:["ک","ا","ش","ا","ن"],
-        difficulty:"easy"
-    },
-    {
-        name:"آپشن",
-        image:"🥖 🦟 ⬆️",
-        letters:["آ","پ","ش","ن"],
-        difficulty:"hard"
-    },
-    {
-        name:"مقصر",
-        image:"🏰 💇‍♀️",
-        letters:["م","ق","ص","ر"],
-        difficulty:"normal"
-    },
-    {
-        name:"مردد",
-        image:"👨‍🍼 👣 💇‍♀️",
-        letters:["م","ر","د","د"],
-        difficulty:"hard"
-    },
-    {
-        name:"خلسه",
-        image:"3️⃣ 🤪",
-        letters:["خ","ل","س","ه"],
-        difficulty:"hard"
-    },
-]
+  {
+    name: "کاشف",
+    image: "🧑‍🍳 K",
+    letters: ["ک", "ا", "ش", "ف"],
+    difficulty: "easy",
+  },
+  {
+    name: "بادگیر",
+    image: "📎 💨",
+    letters: ["ب", "ا", "د", "گ", "ی", "ر"],
+    difficulty: "normal",
+  },
+  {
+    name: "دشمن",
+    image: "💩 🕯️🕯️",
+    letters: ["د", "ش", "م", "ن"],
+    difficulty: "hard",
+  },
+  {
+    name: "مختار",
+    image: "🎸 🧠",
+    letters: ["م", "خ", "ت", "ا", "ر"],
+    difficulty: "easy",
+  },
+  {
+    name: "یوزارسیف",
+    image: "safe 😭 🫵",
+    letters: ["ی", "و", "ز", "ا", "ر", "س", "ی", "ف"],
+    difficulty: "normal",
+  },
+  {
+    name: "مترجم",
+    image: "💎 💩 💇",
+    letters: ["م", "ت", "ر", "ج", "م"],
+    difficulty: "normal",
+  },
+  {
+    name: "مکرر",
+    image: "🪚 🦻 💇‍♀️",
+    letters: ["م", "ک", "ر", "ر"],
+    difficulty: "hard",
+  },
+  {
+    name: "خاکشیر",
+    image: "🦁 🐷",
+    letters: ["خ", "ا", "ک", "ش", "ی", "ر"],
+    difficulty: "easy",
+  },
+  {
+    name: "تفکر",
+    image: "🧑‍🦯‍➡️ 🦭 🔚",
+    letters: ["ت", "ف", "ک", "ر"],
+    difficulty: "hard",
+  },
+  {
+    name: "مطلع",
+    image: "🪤 💇‍♂️",
+    letters: ["م", "ط", "ل", "ع"],
+    difficulty: "normal",
+  },
+  {
+    name: "مسافر",
+    image: "👨‍🦱 📴 🐁",
+    letters: ["م", "س", "ا", "ف", "ر"],
+    difficulty: "easy",
+  },
+  {
+    name: "گاوچران",
+    image: "🦵 🤷 🐄",
+    letters: ["گ", "ا", "و", "چ", "ر", "ا", "ن"],
+    difficulty: "normal",
+  },
+  {
+    name: "کاشان",
+    image: "🪮 K",
+    letters: ["ک", "ا", "ش", "ا", "ن"],
+    difficulty: "easy",
+  },
+  {
+    name: "آپشن",
+    image: "🥖 🦟 ⬆️",
+    letters: ["آ", "پ", "ش", "ن"],
+    difficulty: "hard",
+  },
+  {
+    name: "مقصر",
+    image: "🏰 💇‍♀️",
+    letters: ["م", "ق", "ص", "ر"],
+    difficulty: "normal",
+  },
+  {
+    name: "مردد",
+    image: "👨‍🍼 👣 💇‍♀️",
+    letters: ["م", "ر", "د", "د"],
+    difficulty: "hard",
+  },
+  {
+    name: "مخصوص",
+    image: "🆘 🧠",
+    letters: ["م", "خ", "ص", "و", "ص"],
+    difficulty: "easy",
+  },
+  {
+    name: "شراکت",
+    image: "🚀 🎶",
+    letters: ["ش", "ر", "ا", "ک", "ت"],
+    difficulty: "normal",
+  },
+  {
+    name: "خلسه",
+    image: "3️⃣ 🤪",
+    letters: ["خ", "ل", "س", "ه"],
+    difficulty: "hard",
+  },
+  {
+    name: "جنگآور",
+    image: "®️ 🐄 ⚔️",
+    letters: ["ج", "ن", "گ", "آ", "و", "ر"],
+    difficulty: "normal",
+  },
+  {
+    name: "سازمان",
+    image: "⏳ 🎻",
+    letters: ["س", "ا", "ز", "م", "ا", "ن"],
+    difficulty: "hard",
+  },
+];

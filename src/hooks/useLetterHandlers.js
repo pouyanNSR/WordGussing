@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { removeFromLetters } from "../utils/letterDeleter";
+import { removeFromLetters } from "../utils/removeFromArray";
 
 export const useLetterHandlers = (
   availableLetters,

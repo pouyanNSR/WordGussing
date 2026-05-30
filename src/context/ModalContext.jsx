@@ -1,4 +1,4 @@
-// contexts/ModalContext.jsx
+
 import { createContext, useContext } from 'react';
 import { useModals } from '../hooks/useModals';
 

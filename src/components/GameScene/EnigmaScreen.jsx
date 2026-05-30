@@ -7,7 +7,7 @@ import {
 import { motion, transform } from "motion/react";
 import { handletDifficultyProperties } from "../../utils/handleDifficultyProperties";
 const EnigmaScreen = memo(() => {
-  console.log("EnigmaScreen");
+  // console.log("EnigmaScreen");
   
   const { stage } = useGameData();
   const {background,name} = useMemo(() => handletDifficultyProperties(stage),

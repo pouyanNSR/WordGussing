@@ -5,7 +5,7 @@ import { HomeRounded} from "@mui/icons-material";
 import { useGameActions } from "../../context/GameContext";
 
 const LowerPart = () => {
-  const { backToBoard } = useGameActions();
+  const { goToScreen } = useGameActions();
   return (
     <Grid
       container
@@ -42,7 +42,7 @@ const LowerPart = () => {
           }
         }}
       >
-        <IconButton sx={{ p: 0 }} onClick={backToBoard}>
+        <IconButton sx={{ p: 0 }} onClick={() => goToScreen("board")}>
           <HomeRounded
             className="home-sticker"
             sx={{

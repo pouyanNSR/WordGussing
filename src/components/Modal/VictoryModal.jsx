@@ -2,8 +2,13 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Modal, Box, Typography, Button, styled } from "@mui/material";
 import { keyframes } from "@emotion/react";
-import { useGameActions, useGameData, useGameState } from "../../context/GameContext";
+import {
+  useGameActions,
+  useGameData,
+  useGameState,
+} from "../../context/GameContext";
 import { useModalContext } from "../../context/ModalContext";
+import { enigmas } from "../../data/answer";
 // import victorySound from "../assets/audio/tada.mp3"
 
 // ─── انیمیشن چرخش برای حاشیه درخشان ───
@@ -23,28 +28,44 @@ const GlowingBorder = styled(Box)(({ theme }) => ({
 }));
 
 // ─── کامپوننت مودال ───
-const VictoryModal = ({soundEnabled=true }) => {
+const VictoryModal = ({ soundEnabled = true }) => {
   // console.log("endGame: ",endGame);
-  const {victory} = useModalContext()
+  const { victory } = useModalContext();
   // console.log(victory.isOpen,"victory");
-  
-  const {endGame,preventDoubleClick} = useGameState()
-  
-  const {stage} = useGameData()
-  const {goToNextStage} = useGameActions()
-  
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  const victoryStickers = ["😍","🎗️","👏","🔥","👑","🥇"]
-  const randomSticker = Math.floor( Math.random() * victoryStickers.length)
+  const {solvedEnigmas } = useGameState();
+  const { stage } = useGameData();
+  const { goToNextStage,handleResetButton } = useGameActions();
+
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [endGame, setEndGame] = useState(false);
+
+  const victoryStickers = ["😍", "🎗️", "👏", "🔥", "👑", "🥇"];
+  const randomSticker = Math.floor(Math.random() * victoryStickers.length);
   const chooseRandomVictorySticker = useCallback(() => {
-    return victoryStickers[randomSticker]
-  },[stage])
+    return victoryStickers[randomSticker];
+  }, [stage]);
+
+  useEffect(() => {
+    console.log(solvedEnigmas);
+    
+    const isEndGame = solvedEnigmas.length === enigmas.length;
+    console.log(isEndGame);
+    
+    if (isEndGame) {
+      setEndGame(true);
+    }
+  }, [solvedEnigmas]);
 
   const handleNext = () => {
-    victory.close()
-    goToNextStage()
-  }
+    if (endGame) {
+      handleResetButton()
+      victory.close();
+    } else {
+      victory.close();
+      goToNextStage();
+    }
+  };
 
   const handleMouseMove = (e) => {
     const card = e.currentTarget.getBoundingClientRect();
@@ -71,19 +92,22 @@ const VictoryModal = ({soundEnabled=true }) => {
     };
   }, []);
 
-// پخش صدا هنگام باز شدن مودال
+  // پخش صدا هنگام باز شدن مودال
   useEffect(() => {
     if (victory.isOpen && soundEnabled && audioRef.current) {
       // ریست و پخش
       audioRef.current.currentTime = 0;
-
-      audioRef.current.play()
-        // .then(() => {
-        //   console.log("🔊 صدای پیروزی پخش شد!");
-        // })
-        // .catch((error) => {
-        //   console.warn("⚠️ خطا در پخش صدا:", error);
-        // });
+      try {
+        audioRef.current.play();
+      } catch (error) {
+        console.log("error in sound:", error);
+      }
+      // .then(() => {
+      //   console.log("🔊 صدای پیروزی پخش شد!");
+      // })
+      // .catch((error) => {
+      //   console.warn("⚠️ خطا در پخش صدا:", error);
+      // });
     }
   }, [victory.isOpen, soundEnabled]);
 
@@ -121,7 +145,7 @@ const VictoryModal = ({soundEnabled=true }) => {
     >
       {/* /* ─── عنصر صوتی مخفی ─── / */}
       {/* <audio ref={audioRef} src={victorySound} preload="auto" style={{ display: "none" }}/> */}
-      
+
       <AnimatePresence>
         {victory.isOpen && (
           // ─── کارت اصلی با پرسپکتیو سه‌بعدی ───
@@ -207,8 +231,8 @@ const VictoryModal = ({soundEnabled=true }) => {
                     marginBottom: "16px",
                     filter: "drop-shadow(0 0 15px rgba(254, 249, 218, 0.8))",
                   }}
-                > 
-                  {!endGame ? chooseRandomVictorySticker() :"🏆"}
+                >
+                  {!endGame ? chooseRandomVictorySticker() : "🏆"}
                 </motion.div>
 
                 {/* متن تبریک */}
@@ -228,7 +252,7 @@ const VictoryModal = ({soundEnabled=true }) => {
                       mb: 1,
                     }}
                   >
-                    { endGame ? "تموم شد" : "آفرین" }!
+                    {endGame ? "تموم شد" : "آفرین"}!
                   </Typography>
                 </motion.div>
 
@@ -239,19 +263,25 @@ const VictoryModal = ({soundEnabled=true }) => {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.7 }}
                   >
-                    <Typography variant="h5" color="white" sx={{ mb: 2 }}>
-                      اتمام مرحله‌ی:{" "}
-                      <Box
-                        component="span"
-                        sx={{
-                          color: "#fbbf24",
-                          fontWeight: "bold",
-                          fontSize: "2rem",
-                        }}
-                      >
-                        {stage + 1}
-                      </Box>
-                    </Typography>
+                    {endGame ? (
+                      <Typography variant="h5" color="white" sx={{ mb: 2 }}>
+                        اتمام تمامی مراحل!!!
+                      </Typography>
+                    ) : (
+                      <Typography variant="h5" color="white" sx={{ mb: 2 }}>
+                        اتمام مرحله‌ی:{" "}
+                        <Box
+                          component="span"
+                          sx={{
+                            color: "#fbbf24",
+                            fontWeight: "bold",
+                            fontSize: "2rem",
+                          }}
+                        >
+                          {stage + 1}
+                        </Box>
+                      </Typography>
+                    )}
                   </motion.div>
                 )}
 
@@ -268,21 +298,21 @@ const VictoryModal = ({soundEnabled=true }) => {
 
                 {/* دکمه بازی دوباره */}
                 <motion.div
-                  initial={{scale:0,opacity:0}}
-                  animate={{scale:1,opacity:1}}
-                  transition={{delay:1.3}}
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 1.3 }}
                   // whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   style={{ display: "inline-block" }}
                 >
                   <Button
                     variant="contained"
-                    disabled={preventDoubleClick || endGame}
+                    // disabled={preventDoubleClick || endGame}
                     // onClick={endGame ? null : onClose}
                     onClick={() => {
                       console.log("Button Clicked✅");
                       // if(!endGame) onClose()
-                      if(!endGame) handleNext()
+                      handleNext();
                     }}
                     sx={{
                       px: 5,
@@ -308,7 +338,7 @@ const VictoryModal = ({soundEnabled=true }) => {
                       },
                     }}
                   >
-                   {endGame ? "پایان مراحل":"مرحله بعد"}
+                    {endGame ? "شروع مجدد" : "مرحله بعد"}
                   </Button>
                 </motion.div>
               </Box>
